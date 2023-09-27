@@ -1,9 +1,7 @@
 import styles from "./home.module.css"
 import { BiSearch } from "react-icons/bi"
-import { Link } from "react-router-dom"
-import { useEffect, useState } from "react"
-
-// https://sujeitoprogramador.com/api-cripto/?key=80e3c71be7f89fd5
+import { Link, useNavigate } from "react-router-dom"
+import { FormEvent, useEffect, useState } from "react"
 
 interface CoinsProps {
     name: string
@@ -22,6 +20,8 @@ interface DataProps {
 
 function Home() {
     const [coins, setCoins] = useState<CoinsProps[]>([])
+    const [inputValue, setInputValue] = useState("")
+    const navigate = useNavigate()
 
     useEffect(() => {
 
@@ -55,11 +55,21 @@ function Home() {
 
     },[])
 
+    function handleSearch(e: FormEvent) {
+        e.preventDefault()
+
+        if (inputValue === "") return
+
+        navigate(`/detail/${inputValue}`)
+    }
+
     return (
         <main className={styles.container}>
-            <form className={styles.form}>
+            <form className={styles.form} onSubmit={handleSearch}>
                 <input type="text" 
                     placeholder="Digite a sua moeda"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
                 />
                 <button type="submit">
                     <BiSearch size={30} color="#fff" />
